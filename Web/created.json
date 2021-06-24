@@ -1,0 +1,1 @@
+{"pas": {}, "type": {"ID": {"format": "standard", "type": "string"}, "date_evenement": {"format": null, "type": "date"}}, "position": {"ID": 1, "date_evenement": 2}, "creation_dictionnaire": {"ID": {"parametres": [], "travail": null}, "date_evenement": {"parametres": [], "travail": "date"}}}
