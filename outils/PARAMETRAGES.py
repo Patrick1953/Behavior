@@ -1,5 +1,5 @@
 # coding: utf-8
-import json, sys 
+import json, sys, copy 
 import pprint as p
 from datetime import datetime
 from validationPath import validationPath
@@ -41,7 +41,7 @@ dico_executeur = {'nom_executeur' : 'test',
 
 dico_evenements =  {
     
-'environnement' : {'parametres_lecture' : {'path_fichier' : '../data/test/data_alimentation/',
+'environnement' : {'parametres_lecture' : {'path_fichier' : '../data/#test/data_alimentation/',
                                                      'separateur' : "|",
                              
                                                      'parametres_execution' : {'type_lecteur' : 'fichier',
@@ -312,14 +312,9 @@ dico_systeme = {
         
       
         
-def  ecriture (
-    
-    
-    
-    dico_evenements,
-    dico_systeme,
-    
-    nom_environnement = "#test", isApprentissage = False ):
+def  ecriture (nom_environnement = "#test",
+               isApprentissage = False,
+               new_dico_evenements = None,):
     
     path = '../data/'+ nom_environnement + '/parametres/'        
     validationPath (path)
@@ -327,12 +322,45 @@ def  ecriture (
     path_general =  '../data/general/parametres/'
     #path_general =  '../data/'+ nom_environnement + 'parametres/' 
     validationPath (path_general)       
-       
-
-   
 
 
-    string = json.dumps (dico_evenements)
+
+
+    string = json.dumps (dico_lock)
+    pathFile = path_general + "dico_lock.json"
+    f = open (pathFile, "w")
+    f.write (string)
+    f.close()        
+
+    string = json.dumps (dico_receveur)
+    pathFile = path_general + "dico_receveur.json"
+    f = open (pathFile, "w")
+    f.write (string)
+    f.close()         
+
+    string = json.dumps (dico_executeur)
+    pathFile = path_general + "dico_executeur.json"
+    f = open (pathFile, "w")
+    f.write (string)
+    f.close() 
+
+    string = json.dumps (dico_commandes)
+    pathFile = path_general + "dico_commandes.json"
+    f = open (pathFile, "w")
+    f.write (string)
+    f.close()
+
+
+    string = json.dumps (dico_reponses)
+    pathFile = path_general + "dico_reponses.json"
+    f = open (pathFile, "w")
+    f.write (string)
+    f.close()
+
+    if not new_dico_evenements is None:
+        string = json.dumps (new_dico_evenements)
+    else :
+        string = json.dumps (dico_evenements)
     pathFile = path + "dico_evenements_2.json"
     f = open (pathFile, "w")
     f.write (string)
@@ -370,24 +398,36 @@ def  ecriture (
         A = Apprentissage (arg)
         A.run()
         
-def Update_create__environnement (
-                                dico_evenements,
-                                dico_systeme,
-                                nom_environnement) :
+def Update_create__environnement (nom_environnement, 
+                                 v_type = None,
+                                  position = None,
+                                 ) :
     nom_environnement_complet = "#" + nom_environnement
-    ecriture (
-                dico_evenements,
-                dico_systeme,nom_environnement = nom_environnement_complet, isApprentissage = False)
-    return dico_evenements
+    
+    new_dico_evenements = copy.deepcopy (dico_evenements)
+    if not v_type is None :
+        new_dico_evenements ['type'] = v_type
+    if not position is None :
+        new_dico_evenements ['position'] = position
+           
+    ecriture (nom_environnement = nom_environnement_complet,
+              new_dico_evenements = new_dico_evenements,
+              isApprentissage = False)
+    
+    return new_dico_evenements
 
-def Get_new_dico_evenements () :
-    return dico_evenements
+def Get_new_dico_evenements (v_type = None,
+                            position = None,) :
+    
+    new_dico_evenements = copy.deepcopy (dico_evenements)
+    if not v_type is None :
+        new_dico_evenements ['type'] = v_type
+    if not position is None :
+        new_dico_evenements ['position'] = position
+        
+    return new_dico_evenements
+    
+    
 
 
         
-if __name__ == '__main__' :
-    nom_environnement = 'bresil'
-    Update_create__environnement ( dico_evenements,
-                                    dico_systeme,
-                                    nom_environnement) 
-    print ('end_of_job')
