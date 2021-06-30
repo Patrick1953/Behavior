@@ -8,17 +8,21 @@ from Entree_fichier import Entree_fichier
 
 def  test_entree_fichier () :
     
+    #print ('demarrage')
+    
     def lire_file (pathFile) :
         f = open (pathFile, 'r')
         data = f.read()
         return json.loads (data)
     
     nom_environnement = '#test'
-    pathSysteme = '../data/#test/parametres/dico_evenements_2.json'
+    pathSysteme = '../data/' + nom_environnement + '/parametres/dico_evenements_2.json'
     dico_evenements = lire_file (pathSysteme)
-    #P(dico_evenements)
+    #P(dico_evenements) 
     arg_lecture = dico_evenements  ['environnement']  ['parametres_lecture']
-    arg_lecture ['nom_fichier'] = 'evenements.json'
+    arg_lecture ['nom_fichier'] = 'evenements.csv'
+    
+    #P(arg_lecture)
     
     E = Entree_fichier (arg_lecture)
     
@@ -28,6 +32,7 @@ def  test_entree_fichier () :
     for data in E.readIterator () :
         numero += 1
         continue
+        
     #print (numero)
     E.close ()   
     assert numero == 192

@@ -69,13 +69,10 @@ class Indexation_evenements () :
         self.dico_evenements = Parametres (arg ['dico_evenements'], listeData = [])
         self.position = self.dico_evenements ['position']
         self.type  = self.dico_evenements ['type']
-        
-        
-        
-        
+        #P(self.type)  
               
         self.liste_nom_zone = [nom_zone for nom_zone in self.type.keys()]
-               
+        #P(self.liste_nom_zone)       
         # on prepare le test sur le format et le type
         self.format_zone = {}
         self.type_zone = {}
@@ -185,7 +182,7 @@ class Indexation_evenements () :
                 break
             
             
-            
+            #P(liste_nom_zone)
             # extraction des données de la ligne dans le dico data
             data = {}
             isErreur = False

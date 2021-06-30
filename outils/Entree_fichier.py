@@ -10,7 +10,7 @@ class Entree_fichier () :
         
         
     def init_lecture (self,) :
-        self.f = open (self.pathFile, "r", newline='\r\n')
+        self.f = open (self.pathFile, "r", newline='\n')
         #self.f = open(self.pathFile, 'r')
         
     def readIterator (self,) :

@@ -1,5 +1,5 @@
 # coding: utf-8
-import json, sys 
+import json, sys, copy 
 import pprint as p
 from datetime import datetime
 from validationPath import validationPath
@@ -312,14 +312,9 @@ dico_systeme = {
         
       
         
-def  ecriture (
-    
-    
-    
-    dico_evenements,
-    dico_systeme,
-    
-    nom_environnement = "#test", isApprentissage = False ):
+def  ecriture ( dico_evenements,
+               nom_environnement ,
+               isApprentissage = False ):
     
     path = '../data/'+ nom_environnement + '/parametres/'        
     validationPath (path)
@@ -370,24 +365,51 @@ def  ecriture (
         A = Apprentissage (arg)
         A.run()
         
-def Update_create__environnement (
-                                dico_evenements,
-                                dico_systeme,
-                                nom_environnement) :
+def Update_create__environnement (nom_environnement,
+                                 dico_position = None,
+                                 dico_type = None) :
+    
     nom_environnement_complet = "#" + nom_environnement
-    ecriture (
-                dico_evenements,
-                dico_systeme,nom_environnement = nom_environnement_complet, isApprentissage = False)
-    return dico_evenements
+    
+    new_dico_evenements = Get_new_dico_evenements (  nom_environnement_complet,
+                                                     dico_position = dico_position,
+                                                     dico_type = dico_type,)
+    
+    ecriture ( new_dico_evenements,
+               nom_environnement_complet ,)
+    
+    return new_dico_evenements
 
-def Get_new_dico_evenements () :
-    return dico_evenements
-
-
+def Get_new_dico_evenements (nom_environnement_complet,
+                             dico_position = None,
+                             dico_type = None) :
+    
+    new_dico_evenements = copy.deepcopy (dico_evenements)
+    # on fixe le parametre lecture alimentation
+    path_alimentation = '../data/'+ nom_environnement_complet + '/data_alimentation/'
+    new_dico_evenements ['environnement'] ['parametres_lecture' ] ['path_fichier'] = path_alimentation
+    
+    
+    
+    
+    if not dico_position is None and not dico_type is None :
+        path_fichier = '../data/' + nom_environnement_complet + '/data_alimentation/'
+        new_dico_evenements ['environnement'] ['parametres_lecture'] ['path_fichier'] = path_fichier
         
-if __name__ == '__main__' :
-    nom_environnement = 'bresil'
-    Update_create__environnement ( dico_evenements,
-                                    dico_systeme,
-                                    nom_environnement) 
-    print ('end_of_job')
+        x = {'ID' : {'travail' : None,
+                        'parametres' : []},
+             'date_evenement' : {'travail' : 'date',
+                                'parametres' : []},
+             }
+
+        new_dico_evenements ['creation_dictionnaire'] =  x
+        new_dico_evenements ['dictionnaire'] =  x
+
+        new_dico_evenements ['pas'] = {}
+
+
+        new_dico_evenements ['apprentissage'] = {'liste_execution' : [], }
+        new_dico_evenements ['position'] = dico_position
+        new_dico_evenements ['type'] = dico_type
+        
+    return new_dico_evenements
